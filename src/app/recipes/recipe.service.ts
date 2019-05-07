@@ -1,17 +1,40 @@
 import { Recipe } from './recipe.model';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
+import { Ingredient } from '../shared/ingredient.model';
+import { ShoppingListService } from '../shopping-list/shopping-list.service';
 
+@Injectable()
 export class RecipeService {
     recipeSelected = new EventEmitter<Recipe>();
     
     private recipes: Recipe[] = [
-        new Recipe('A test Recipe','this is simply a test', 
-        'http://downloads.bbc.co.uk/skillswise/entry12/english/en05skim/images/en05skim-e2-w-scanning-a-recipe-tikka-masala-ans-592x838.jpg'),
-        new Recipe('A test Recipe','this is simply a test', 
-        'http://downloads.bbc.co.uk/skillswise/entry12/english/en05skim/images/en05skim-e2-w-scanning-a-recipe-tikka-masala-ans-592x838.jpg')
+        new Recipe('Tasty Schnitzel',
+        'A super-tasty Schnitzel - just awesome !', 
+        'https://www.daskochrezept.de/sites/default/files/styles/169_xl/public/rezepte/2009/2/Wiener-Schnitzel-1A-49a1616656a6c.jpg',
+        [
+            new Ingredient('Meat',1),
+            new Ingredient('French Fries', 20)
+        ]),
+        new Recipe('Big Fat Burger',
+        'What else you need to say?', 
+        'https://www.bbqlove.de/wp-content/uploads/2016/12/Fotolia_94498422_S.jpg',
+        [
+            new Ingredient('Buns', 2),
+            new Ingredient('Meat',1)
+        ])
       ];
+
+      constructor(private slService: ShoppingListService) {}
 
       getRecipes() {
           return this.recipes.slice();
+      }
+
+      getRecipe(index: number) {
+          return this.recipes[index];
+      }
+
+      addIngredientsToShoppingList(ingredients: Ingredient[]) {
+        this.slService.addIngredients(ingredients);
       }
 }
